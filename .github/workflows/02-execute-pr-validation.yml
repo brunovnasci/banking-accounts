@@ -1,0 +1,11 @@
+name: Pull request created to main branch
+
+on:
+  pull_request:
+    - main
+
+jobs:
+  call-maven-build:
+    uses: brunovnasci/trunk-based-ci-cd/maven/build.yml
+    with:
+      java_version: 17
