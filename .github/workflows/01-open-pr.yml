@@ -5,6 +5,9 @@ on:
     branches:
       - feature/*
 
+permissions:
+  pull-requests: write
+
 jobs:
   call-open-pr:
     uses: brunovnasci/trunk-based-ci-cd/.github/workflows/create-pr.yml@main
