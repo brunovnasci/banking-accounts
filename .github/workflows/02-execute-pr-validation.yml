@@ -1,12 +1,19 @@
-name: Pull request created to main branch
+name: Validate pull request
 
 on:
   pull_request:
-    branches:
-      - feature/*
 
 jobs:
-  call-maven-build:
-    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/build.yml@main
-    with:
-      java_version: 17
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "17"
+          architecture: x64
+          cache: maven
+      - run: mvn clean install -Dmaven.test.skip
