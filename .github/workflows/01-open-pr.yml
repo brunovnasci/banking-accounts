@@ -7,4 +7,4 @@ on:
 
 jobs:
   call-open-pr:
-    uses: brunovnasci/trunk-based-ci-cd/pull_request/create-pr.yml
+    uses: brunovnasci/trunk-based-ci-cd/pull_request/create-pr.yml@main
