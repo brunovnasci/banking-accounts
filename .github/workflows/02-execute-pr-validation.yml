@@ -6,6 +6,6 @@ on:
 
 jobs:
   call-maven-build:
-    uses: brunovnasci/trunk-based-ci-cd/.github/workflow/maven/build.yml@main
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/maven/build.yml@main
     with:
       java_version: 17
