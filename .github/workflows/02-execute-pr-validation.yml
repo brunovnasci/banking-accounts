@@ -1,6 +1,11 @@
 name: Validate pull request
 
 on:
+  workflow_run:
+    workflows:
+      - Create Pull Request
+    types:
+      - completed
   pull_request:
     types: [ opened, synchronize, reopened ]
 
