@@ -14,10 +14,18 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-#      - name: Validate if pull request already exists
-#        id: validate_
-#        run: gh pr list -B ${{ github.event.repository.default_branch }} -H ${{ github.ref_name }}
+      - name: Validate if pull request already exists
+        run: |
+          exists=false
+          numBranches="$(gh pr list -B main -H feature/test  | wc -l)"
+          if [ "$numBranches" -gt 0 ]; then
+            exists=true
+          fi
+          echo PR exists: $exists 
+          echo 'EXISTS_PULL_REQUEST='$exists >> $GITHUB_ENV
       - name: Create pull request
-        run: gh pr create -B ${{ github.event.repository.default_branch }} -H ${{ github.ref_name }} --title 'PR gerado automaticamente. ${{ github.ref_name }} -> ${{ github.event.repository.default_branch }}' --body 'PR gerado automaticamente'
+        if: EXISTS_PULL_REQUEST == false
+        run: |
+          gh pr create -B ${{ github.event.repository.default_branch }} -H ${{ github.ref_name }} --title 'PR gerado automaticamente. ${{ github.ref_name }} -> ${{ github.event.repository.default_branch }}' --body 'PR gerado automaticamente'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
