@@ -18,9 +18,9 @@ jobs:
         id: change_metadata
         shell: bash
         run: echo "feature_branch_name=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-      - name: Validate if pull request already exists
-        id: validate_
-        run: gh pr list -B ${{ github.event.repository.default_branch }} -H ${{ steps.change_metadata.outputs.feature_branch_name }}
+#      - name: Validate if pull request already exists
+#        id: validate_
+#        run: gh pr list -B ${{ github.event.repository.default_branch }} -H ${{ steps.change_metadata.outputs.feature_branch_name }}
       - name: Create pull request
         run: gh pr create -B ${{ github.event.repository.default_branch }} -H ${{ steps.change_metadata.outputs.feature_branch_name }} --title 'PR gerado automaticamente. ${{ steps.change_metadata.outputs.feature_branch_name }} -> ${{ github.ref_name }}' --body 'PR gerado automaticamente'
         env:
