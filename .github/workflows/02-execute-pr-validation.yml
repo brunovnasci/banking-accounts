@@ -3,7 +3,7 @@ name: Pull request created to main branch
 on:
   pull_request:
     branches:
-      - main
+      - feature/*
 
 jobs:
   call-maven-build:
