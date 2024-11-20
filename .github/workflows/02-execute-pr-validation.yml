@@ -17,4 +17,5 @@ jobs:
           java-version: "17"
           architecture: x64
           cache: maven
-      - run: mvn clean install -Dmaven.test.skip
+      - name: Build application
+        run: mvn clean install -Dmaven.test.skip
