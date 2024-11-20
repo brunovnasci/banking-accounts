@@ -18,7 +18,7 @@ jobs:
         id: pull_request_exists
         run: |
           exists=false
-          numBranches="$(gh pr list -B main -H feature/test  | wc -l)"
+          numBranches="$(gh pr list -B ${{ github.event.repository.default_branch }} -H ${{ github.ref_name }} | wc -l)"
           if [ "$numBranches" -gt 0 ]; then
             exists=true
           fi
