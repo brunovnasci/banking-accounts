@@ -1,7 +1,9 @@
 name: Validate pull request
 
 on:
-  pull_request:
+  push:
+    branches:
+      - feature/*
 
 jobs:
   build:
