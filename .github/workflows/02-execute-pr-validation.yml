@@ -1,9 +1,8 @@
 name: Validate pull request
 
 on:
-  push:
-    branches:
-      - feature/*
+  pull_request:
+    types: [ opened, synchronize, reopened ]
 
 jobs:
   build:
