@@ -20,7 +20,7 @@ jobs:
       - name: Build application
         run: mvn clean compile
 
-  tests:
+  tests-and-coverage:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code
@@ -34,11 +34,6 @@ jobs:
           cache: maven
       - name: Run application tests
         run: mvn clean test
-
-  coverage:
-    runs-on: ubuntu-latest
-    needs: tests
-    steps:
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1.7.1
         with:
