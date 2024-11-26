@@ -36,12 +36,17 @@ jobs:
         run: mvn clean test
       - name: Add coverage to PR
         uses: madrapps/jacoco-report@v1.7.1
+        id: jacoco
         with:
           paths: |
             ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
           token: ${{ secrets.GITHUB_TOKEN }}
           min-coverage-overall: 40
           min-coverage-changed-files: 60
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
 
   security:
     runs-on: ubuntu-latest
