@@ -38,7 +38,7 @@ jobs:
       - name: Run application tests
         run: mvn clean test
       - run: pwd
-      - run: ls -la ${{ github.workspace }}/**/target/site/jacoco
+      - run: ls -la ${{ github.workspace }}/target/site/jacoco
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
