@@ -69,7 +69,6 @@ jobs:
 
   docker-build:
     runs-on: ubuntu-latest
-    environment: development
     needs: build-and-test
     steps:
       - name: Check out code
