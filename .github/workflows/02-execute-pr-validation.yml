@@ -101,8 +101,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
-      - env:
-          DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -112,6 +110,8 @@ jobs:
 #      - name: Fill in the new image ID in the Amazon ECS task definition
 #        id: task-def
 #        uses: aws-actions/amazon-ecs-render-task-definition@v1
+#        env:
+#          DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
 #        with:
 #          task-definition: task-definition.json
 #          container-name: banking-accounts
