@@ -101,6 +101,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     steps:
+      - name: Check out code
+        uses: actions/checkout@v4
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
