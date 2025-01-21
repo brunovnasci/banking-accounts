@@ -13,27 +13,8 @@ Parameters:
     Default: banking-accounts
 
 Resources:
-  TaskRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: !Sub ${ApplicationName}-${EnvironmentName}-task-role
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action: sts:AssumeRole
-            Condition:
-              ArnLike:
-                aws:SourceArn: !Sub arn:${AWS::Partition}:ecs:${AWS::Region}:${AWS::AccountId}:*
-              StringEquals:
-                aws:SourceAccount: !Sub ${AWS::AccountId}
-
   TaskDefinition:
     Type: AWS::ECS::TaskDefinition
-    DependsOn:
-      - TaskRole
     Properties:
       Family: !Sub ${ApplicationName}-${EnvironmentName}
       Cpu: 256
@@ -42,10 +23,11 @@ Resources:
       RuntimePlatform:
         CpuArchitecture: x86_64
         OperatingSystemFamily: LINUX
-      TaskRoleArn: !GetAtt TaskRole.Arn
+      TaskRoleArn:
+        "Fn::ImportValue": !Sub ${ApplicationName}-${EnvironmentName}-task-role
       ContainerDefinitions:
         - Name: !Sub ${ApplicationName}-${EnvironmentName}
-          Image: 140023370685.dkr.ecr.us-east-2.amazonaws.com/banking-accounts:9888a1d4c15ace801f027d1d9fb73f0cceb2f5c1
+          Image: 140023370685.dkr.ecr.us-east-2.amazonaws.com/banking-accounts:1c00936e5c24372beac11ce45985b490ddf4ece3
           Cpu: 128
           Memory: 256
           PortMappings:
@@ -79,6 +61,3 @@ Outputs:
     Value: !Ref TaskDefinition
     Export:
       Name: !Sub ${ApplicationName}-${EnvironmentName}-task-definition
-  TaskRole:
-    Description: The ARN of the IAM Role used by the task
-    Value: !GetAtt TaskRole.Arn

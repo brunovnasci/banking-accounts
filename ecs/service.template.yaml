@@ -27,3 +27,10 @@ Resources:
       DeploymentConfiguration:
         MaximumPercent: 200
         MinimumHealthyPercent: 100
+
+Outputs:
+  Service:
+      Description: The ARN of the ECS service
+      Value: !Ref ECSService
+      Export:
+        Name: !Sub ${ApplicationName}-${EnvironmentName}-service-arn

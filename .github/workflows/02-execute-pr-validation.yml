@@ -106,23 +106,22 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
           aws-region: us-east-2
-      - run: echo "executed with success!!"
-#      - name: Fill in the new image ID in the Amazon ECS task definition
-#        id: task-def
-#        uses: aws-actions/amazon-ecs-render-task-definition@v1
-#        env:
-#          DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
-#        with:
-#          task-definition: task-definition.json
-#          container-name: banking-accounts
-#          image: ${DOCKER_IMAGE_TAG}
-#      - name: Deploy Amazon ECS task definition
-#        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-#        with:
-#          task-definition: ${{ steps.task-def.outputs.task-definition }}
-#          service: banking-accounts-dev
-#          cluster: tcc-cluster-dev
-#          wait-for-service-stability: true
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
+        with:
+          task-definition: .aws/task-definition.json
+          container-name: banking-accounts-dev
+          image: ${DOCKER_IMAGE_TAG}
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: banking-accounts-dev
+          cluster: tcc-cluster-dev
+          wait-for-service-stability: true
 
   security:
     runs-on: ubuntu-latest
