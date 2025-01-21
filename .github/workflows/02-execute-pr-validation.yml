@@ -112,7 +112,7 @@ jobs:
         env:
           DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
         with:
-          task-definition: .aws/task-definition.json
+          task-definition: task-definition.json
           container-name: banking-accounts-dev
           image: ${DOCKER_IMAGE_TAG}
       - name: Deploy Amazon ECS task definition
