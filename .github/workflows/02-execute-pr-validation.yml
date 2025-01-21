@@ -70,6 +70,8 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs: build-and-test
+    outputs:
+      docker-image-tag: ${{ steps.export-docker-image-tag.outputs.tag }}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -86,11 +88,41 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
-      - run: echo "${{ steps.login-ecr.outputs.registry }}"
+      - name: Export Docker image tag
+        id: export-docker-image-tag
+        run: echo "tag=${{ steps.login-ecr.outputs.registry }}/banking-accounts:${{ github.sha }}" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
-        run: docker build -t 140023370685.dkr.ecr.us-east-2.amazonaws.com/banking-accounts:${{ github.sha }} .
-      - name: Push docker image
-        run: docker push 140023370685.dkr.ecr.us-east-2.amazonaws.com/banking-accounts:${{ github.sha }}
+        run: docker build -t ${{ steps.export-docker-image-tag.outputs.tag }} .
+      - name: Push Docker image
+        run: docker push ${{ steps.export-docker-image-tag.outputs.tag }}
+
+    deploy-to-ecs:
+      needs: docker-build
+      runs-on: ubuntu-latest
+      environment: development
+      steps:
+        - env:
+            DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
+        - name: Configure AWS credentials
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+            aws-region: us-east-2
+        - run: echo "executed with success!!"
+#        - name: Fill in the new image ID in the Amazon ECS task definition
+#          id: task-def
+#          uses: aws-actions/amazon-ecs-render-task-definition@v1
+#          with:
+#            task-definition: task-definition.json
+#            container-name: banking-accounts
+#            image: ${DOCKER_IMAGE_TAG}
+#        - name: Deploy Amazon ECS task definition
+#          uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+#          with:
+#            task-definition: ${{ steps.task-def.outputs.task-definition }}
+#            service: banking-accounts-dev
+#            cluster: tcc-cluster-dev
+#            wait-for-service-stability: true
 
   security:
     runs-on: ubuntu-latest
