@@ -18,29 +18,14 @@ Eliminar cluster ECS:
 aws cloudformation delete-stack --stack-name tcc-cluster
 ```
 
-Registrar ECS Task Definition
-```bash
-aws cloudformation create-stack --stack-name banking-accounts-task-definition --template-body file://ecs/task-definition.template.yaml --capabilities CAPABILITY_NAMED_IAM
-```
-
-Atualizar ECS Task Definition
-```bash
-aws cloudformation update-stack --stack-name banking-accounts-task-definition --template-body file://ecs/task-definition.template.yaml --capabilities CAPABILITY_NAMED_IAM
-```
-
-Eliminar ECS Task Definition
-```bash
-aws cloudformation delete-stack --stack-name banking-accounts-task-definition
-```
-
 Criar serviço ECS
 ```bash
-aws cloudformation create-stack --stack-name banking-accounts-service --template-body file://ecs/service.template.yaml
+aws cloudformation create-stack --stack-name banking-accounts-service --template-body file://ecs/service.template.yaml --capabilities CAPABILITY_NAMED_IAM
 ```
 
 Atualizar serviço ECS
 ```bash
-aws cloudformation update-stack --stack-name banking-accounts-service --template-body file://ecs/service.template.yaml
+aws cloudformation update-stack --stack-name banking-accounts-service --template-body file://ecs/service.template.yaml --capabilities CAPABILITY_NAMED_IAM
 ```
 
 Eliminar serviço ECS
