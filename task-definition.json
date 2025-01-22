@@ -1,5 +1,4 @@
 {
-  "taskDefinitionArn": "arn:aws:ecs:us-east-2:140023370685:task-definition/banking-accounts-dev:24",
   "containerDefinitions": [
     {
       "name": "banking-accounts-dev",
