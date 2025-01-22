@@ -108,6 +108,9 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
           aws-region: us-east-2
+      - runs: echo "${DOCKER_IMAGE_TAG}"
+        env:
+          DOCKER_IMAGE_TAG: ${{ needs.docker-build.outputs.docker-image-tag }}
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
