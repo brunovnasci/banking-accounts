@@ -48,6 +48,12 @@ Resources:
           Cpu: 128
           Memory: 256
           Essential: true
+#          PortMappings:
+#            - Name: !Sub ${ApplicationName}-${EnvironmentName}-8080-http
+#              ContainerPort: 8080
+#              HostPort: 8080
+#              Protocol: tcp
+#              AppProtocol: http
 #          LogConfiguration:
 #            LogDriver: awslogs
 #            Options:
