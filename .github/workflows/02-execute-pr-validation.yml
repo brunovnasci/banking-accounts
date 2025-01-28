@@ -93,6 +93,7 @@ jobs:
         run: echo "tag=${{ steps.login-ecr.outputs.registry }}/banking-accounts:${{ github.sha }}" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         run: docker build -t ${{ steps.export-docker-image-tag.outputs.tag }} .
+      # TODO: Add step to execute app dry run
       - name: Push Docker image
         run: docker push ${{ steps.export-docker-image-tag.outputs.tag }}
 
