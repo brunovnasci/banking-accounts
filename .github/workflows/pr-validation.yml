@@ -30,6 +30,7 @@ jobs:
 
   deploy-to-ecs:
     needs: docker-build
+    uses: ./.github/workflows/ecs-deploy.yml
     with:
       application_name: banking-accounts
       aws_region: us-east-2
