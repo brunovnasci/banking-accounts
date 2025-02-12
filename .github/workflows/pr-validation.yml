@@ -10,6 +10,9 @@ permissions:
 
 # TODO: Validar se changelog foi preenchido
 
+env:
+  application_name: banking-accounts
+
 jobs:
   build-and-test:
     uses: ./.github/workflows/build.yml
@@ -25,6 +28,7 @@ jobs:
     needs: build-and-test
     uses: ./.github/workflows/docker-build.yml
     with:
+      application_name: $application_name
       aws_region: us-east-2
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
