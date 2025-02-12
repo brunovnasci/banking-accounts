@@ -15,6 +15,10 @@ on:
         description: "IAM role to assume"
         required: true
         type: string
+    outputs:
+      docker-image-tag:
+        description: "Docker image tag"
+        value: ${{ jobs.docker-build.outputs.docker-image-tag }}
 
 jobs:
   docker-build:
