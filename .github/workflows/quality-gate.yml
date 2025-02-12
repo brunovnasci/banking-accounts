@@ -1,0 +1,42 @@
+name: Quality Gate
+
+on:
+  workflow_call:
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: target/
+      - name: Add coverage to PR
+        uses: madrapps/jacoco-report@v1.7.1
+        id: jacoco
+        with:
+          paths: |
+            ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          min-coverage-overall: 90
+          min-coverage-changed-files: 90
+          title: '# :lobster: Coverage Report'
+      - name: Get the Coverage info
+        run: |
+          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
+          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
+      - name: Apply quality gate for overall coverage
+        if: ${{ steps.jacoco.outputs.coverage-overall < 90.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Overall coverage is less than 90%!')
+      - name: Apply quality gate for changed files coverage
+        if: ${{ steps.jacoco.outputs.coverage-changed-files < 90.0 }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.setFailed('Changed files coverage is less than 90%!')

@@ -1,0 +1,56 @@
+name: Deploy application to ECS cluster
+
+on:
+  workflow_call:
+    inputs:
+      application_name:
+        description: "Application name"
+        required: true
+        type: string
+      aws_region:
+        description: "AWS region"
+        required: true
+        type: string
+      iam_role:
+        description: "IAM role to assume"
+        required: true
+        type: string
+      environment:
+        description: "Environment"
+        required: true
+        type: string
+      cluster:
+        description: "ECS cluster name"
+        required: true
+        type: string
+      docker_image_tag:
+        description: "Docker image tag"
+        required: true
+        type: string
+
+jobs:
+  deploy-to-ecs:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: "${{ inputs.iam_role }}"
+          aws-region: "${{ inputs.aws_region }}"
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: .aws/task-definition.json
+          container-name: "${{ inputs.application_name }}"
+          image: "${{ inputs.docker_image_tag }}"
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: "${{ inputs.application_name }}"
+          cluster: "${{ inputs.cluster }}"
+          wait-for-service-stability: true
