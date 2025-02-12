@@ -27,7 +27,7 @@ jobs:
     needs: build-and-test
     uses: ./.github/workflows/docker-build.yml
     with:
-      application_name: $APPLICATION_NAME
+      application_name: "$APPLICATION_NAME"
       aws_region: us-east-2
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
