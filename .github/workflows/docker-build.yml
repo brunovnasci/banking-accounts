@@ -27,8 +27,8 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: {{ inputs.iam_role }}
-          aws-region: {{ inputs.aws_region }}
+          role-to-assume: "${{ inputs.iam_role }}"
+          aws-region: "${{ inputs.aws_region }}"
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
@@ -39,7 +39,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Export Docker image tag
         id: export-docker-image-tag
-        run: echo "tag=${{ steps.login-ecr.outputs.registry }}/{{ inputs.application_name }}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+        run: echo "tag=${{ steps.login-ecr.outputs.registry }}/${{ inputs.application_name }}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
       - name: Build Docker image
         run: docker build -t ${{ steps.export-docker-image-tag.outputs.tag }} .
       - name: Push Docker image
