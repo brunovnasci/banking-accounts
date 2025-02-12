@@ -1,0 +1,46 @@
+name: Quality Gate
+
+on:
+  workflow_call:
+    inputs:
+      application_name:
+        description: "Application name"
+        required: true
+        type: string
+      aws_region:
+        description: "AWS region"
+        required: true
+        type: string
+      iam_role:
+        description: "IAM role to assume"
+        required: true
+        type: string
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    outputs:
+      docker-image-tag: ${{ steps.export-docker-image-tag.outputs.tag }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: {{ inputs.iam_role }}
+          aws-region: {{ inputs.aws_region }}
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: target/
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      - name: Export Docker image tag
+        id: export-docker-image-tag
+        run: echo "tag=${{ steps.login-ecr.outputs.registry }}/{{ inputs.application_name }}:${{ github.sha }}" >> "$GITHUB_OUTPUT"
+      - name: Build Docker image
+        run: docker build -t ${{ steps.export-docker-image-tag.outputs.tag }} .
+      - name: Push Docker image
+        run: docker push ${{ steps.export-docker-image-tag.outputs.tag }}
