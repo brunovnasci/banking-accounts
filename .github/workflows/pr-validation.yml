@@ -30,32 +30,12 @@ jobs:
 
   deploy-to-ecs:
     needs: docker-build
-    runs-on: ubuntu-latest
-    environment: development
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
-          aws-region: us-east-2
-      - name: echo docker tag
-        run: echo "${{ needs.docker-build.outputs.docker-image-tag }}"
-      - name: Fill in the new image ID in the Amazon ECS task definition
-        id: render-task-def
-        uses: aws-actions/amazon-ecs-render-task-definition@v1
-        with:
-          task-definition: .aws/task-definition.json
-          container-name: banking-accounts-dev
-          image: ${{ needs.docker-build.outputs.docker-image-tag }}
-      - name: Deploy Amazon ECS task definition
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
-        with:
-          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          service: banking-accounts-dev
-          cluster: tcc-cluster-dev
-          wait-for-service-stability: true
+    with:
+      application_name: banking-accounts
+      aws_region: us-east-2
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      environment: dev
+
 
   security:
     runs-on: ubuntu-latest
