@@ -36,6 +36,7 @@ jobs:
       aws_region: us-east-2
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
       environment: dev
+      cluster: tcc-cluster-dev
 
 
   security:
