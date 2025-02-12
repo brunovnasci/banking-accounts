@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build-and-test:
-    uses: .github/components/build.yml
+    uses: ./.github/components/build.yml
     with:
       java_version: 17
 
