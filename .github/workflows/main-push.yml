@@ -1,24 +1,18 @@
-name: Validate pull request
+name: Automatic deploy to dev ECS cluster
 
 on:
-  pull_request:
-    types: [ opened, synchronize, reopened ]
+  push:
+    branches:
+      - main
 
 permissions:
-  pull-requests: write
   id-token: write
-
-# TODO: Validar se changelog foi preenchido
 
 jobs:
   build-and-test:
     uses: ./.github/workflows/build.yml
     with:
       java_version: 17
-
-  quality-gate:
-    needs: build-and-test
-    uses: ./.github/workflows/quality-gate.yml
 
   docker-build:
     needs: build-and-test
@@ -38,8 +32,3 @@ jobs:
       environment: dev
       cluster: tcc-cluster-dev
       docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "TODO Security check"

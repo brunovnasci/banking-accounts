@@ -45,12 +45,12 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: .aws/task-definition.json
-          container-name: "${{ inputs.application_name }}"
+          container-name: "${{ inputs.application_name }}-${{ inputs.environment }}"
           image: "${{ inputs.docker_image_tag }}"
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v2
         with:
           task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-          service: "${{ inputs.application_name }}"
+          service: "${{ inputs.application_name }}-${{ inputs.environment }}"
           cluster: "${{ inputs.cluster }}"
           wait-for-service-stability: true
