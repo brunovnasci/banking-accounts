@@ -24,6 +24,7 @@ jobs:
           min-coverage-overall: 90
           min-coverage-changed-files: 90
           title: '# :lobster: Coverage Report'
+          update-comment: true
       - name: Get the Coverage info
         run: |
           echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"

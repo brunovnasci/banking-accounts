@@ -32,3 +32,8 @@ jobs:
       environment: dev
       cluster: tcc-cluster-dev
       docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
+
+  security:
+    needs: build-and-test
+    uses: ./.github/workflows/security.yml
+    secrets: inherit
