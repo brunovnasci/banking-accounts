@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+      - run: echo "${{ secrets.SNYK_TOKEN }}"
       - name: Run Snyk
         uses: snyk/actions/maven-3-jdk-17@master
         continue-on-error: true
