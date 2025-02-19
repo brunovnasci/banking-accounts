@@ -14,7 +14,7 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java-kotlin
-          build-mode: manual
+          build-mode: autobuild
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
