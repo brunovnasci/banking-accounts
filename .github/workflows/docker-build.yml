@@ -22,6 +22,7 @@ on:
 
 jobs:
   docker-build:
+    name: Build Docker image
     runs-on: ubuntu-latest
     outputs:
       docker-image-tag: ${{ steps.export-docker-image-tag.outputs.tag }}
