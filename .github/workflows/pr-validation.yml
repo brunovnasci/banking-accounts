@@ -12,24 +12,24 @@ permissions:
 # TODO: Validar se changelog foi preenchido
 
 jobs:
-  build-and-test:
+  build:
     uses: ./.github/workflows/build.yml
     with:
       java_version: 17
 
   quality-gate:
-    needs: build-and-test
+    needs: build
     uses: ./.github/workflows/quality-gate.yml
 
   docker-build:
-    needs: build-and-test
+    needs: build
     uses: ./.github/workflows/docker-build.yml
     with:
       application_name: banking-accounts
       aws_region: us-east-2
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
-  deploy-to-ecs:
+  deploy:
     needs: docker-build
     uses: ./.github/workflows/ecs-deploy.yml
     with:
@@ -41,6 +41,6 @@ jobs:
       docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
 
   security:
-    needs: build-and-test
+    needs: build
     uses: ./.github/workflows/security.yml
     secrets: inherit
