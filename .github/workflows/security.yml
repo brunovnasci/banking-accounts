@@ -12,15 +12,10 @@ jobs:
       matrix:
         include:
           - language: java-kotlin
-            build-mode: manual
+            build-mode: autobuild
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: target/
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
