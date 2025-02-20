@@ -25,7 +25,7 @@ on:
         value: ${{ jobs.docker-build.outputs.docker-image-tag }}
 
 jobs:
-  docker-build:
+  docker:
     name: Build Docker image
     runs-on: ubuntu-latest
     outputs:

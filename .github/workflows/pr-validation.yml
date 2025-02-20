@@ -21,7 +21,7 @@ jobs:
     needs: build
     uses: ./.github/workflows/quality-gate.yml
 
-  docker-build:
+  docker:
     needs: build
     uses: ./.github/workflows/docker-build.yml
     with:
