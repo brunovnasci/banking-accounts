@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Create tag
-        run: echo "${{ github.ref_name }}
+        run: echo "${{ github.ref_name }}"
 
 #  docker-build:
 #    needs: build
