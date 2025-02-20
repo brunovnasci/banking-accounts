@@ -22,7 +22,7 @@ on:
     outputs:
       docker-image-tag:
         description: "Docker image tag"
-        value: ${{ jobs.docker-build.outputs.docker-image-tag }}
+        value: ${{ jobs.docker.outputs.docker-image-tag }}
 
 jobs:
   docker:

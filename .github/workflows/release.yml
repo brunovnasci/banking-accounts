@@ -24,7 +24,7 @@ jobs:
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
   deploy:
-    needs: docker-build
+    needs: docker
     uses: ./.github/workflows/ecs-deploy.yml
     with:
       application_name: banking-accounts
@@ -32,7 +32,7 @@ jobs:
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
       environment: dev
       cluster: tcc-cluster-dev
-      docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
+      docker_image_tag: ${{ needs.docker.outputs.docker-image-tag }}
 
   security:
     needs: build
