@@ -17,6 +17,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Create tag
         run: echo "${{ github.ref_name }}"
+      - name: Is pre release
+        run: echo "${{ github.event.release.prerelease }}"
 
 #  docker-build:
 #    needs: build
