@@ -2,7 +2,7 @@ name: Release application
 
 on:
   release:
-    types: [ released ]
+    types: [ published ]
 
 jobs:
 #  build:
