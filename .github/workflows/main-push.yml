@@ -38,4 +38,5 @@ jobs:
   security:
     needs: build
     uses: ./.github/workflows/security.yml
-    secrets: inherit
+    secrets:
+      snyk_token: ${{ secrets.SNYK_TOKEN }}

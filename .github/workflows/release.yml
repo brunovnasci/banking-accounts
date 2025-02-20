@@ -5,42 +5,33 @@ on:
     types: [ published ]
 
 jobs:
-#  build:
-#    uses: ./.github/workflows/build.yml
-#    with:
-#      java_version: 17
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      java_version: 17
 
-  tag:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Create tag
-        run: echo "${{ github.ref_name }}"
-      - name: Is pre release
-        run: echo "${{ github.event.release.prerelease }}"
+  docker-build:
+    needs: build
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      application_name: banking-accounts
+      image_tag: ${{ github.ref_name }}
+      aws_region: us-east-2
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
-#  docker-build:
-#    needs: build
-#    uses: ./.github/workflows/docker-build.yml
-#    with:
-#      application_name: banking-accounts
-#      image_tag: test
-#      aws_region: us-east-2
-#      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+  deploy:
+    needs: docker-build
+    uses: ./.github/workflows/ecs-deploy.yml
+    with:
+      application_name: banking-accounts
+      aws_region: us-east-2
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      environment: dev
+      cluster: tcc-cluster-dev
+      docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
 
-#  deploy:
-#    needs: docker-build
-#    uses: ./.github/workflows/ecs-deploy.yml
-#    with:
-#      application_name: banking-accounts
-#      aws_region: us-east-2
-#      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
-#      environment: dev
-#      cluster: tcc-cluster-dev
-#      docker_image_tag: ${{ needs.docker-build.outputs.docker-image-tag }}
-
-#  security:
-#    needs: build
-#    uses: ./.github/workflows/security.yml
-#    secrets: inherit
+  security:
+    needs: build
+    uses: ./.github/workflows/security.yml
+    secrets:
+      snyk_token: ${{ secrets.SNYK_TOKEN }}
