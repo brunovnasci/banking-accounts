@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/actions/build-app
+    uses: ./.github/actions/build-app@main
     with:
       java_version: 17
 
