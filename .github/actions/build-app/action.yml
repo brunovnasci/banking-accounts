@@ -1,12 +1,10 @@
 name: Build maven application
 
-on:
-  workflow_call:
-    inputs:
-      java_version:
-        description: "Application java version"
-        type: string
-        required: true
+inputs:
+  java_version:
+    description: "Application java version"
+    type: string
+    required: true
 
 jobs:
   build:
