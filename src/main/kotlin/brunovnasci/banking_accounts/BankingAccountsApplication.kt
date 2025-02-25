@@ -6,6 +6,6 @@ import org.springframework.boot.runApplication
 @SpringBootApplication
 class BankingAccountsApplication
 
-fun main(args: Array<String>) {
+fun main(args: AArray<String>) {
 	runApplication<BankingAccountsApplication>(*args)
 }
