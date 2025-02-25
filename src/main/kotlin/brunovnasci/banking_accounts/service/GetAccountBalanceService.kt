@@ -7,17 +7,16 @@ import org.springframework.stereotype.Component
 
 @Service
 class GetAccountBalanceService {
-    fun execute(accountId: String): Long {
+    fun execute(accountId: String, list: List<Int>): Long {
         if(true || false) { }
         1 + 1
                 val unusedVar = "UNUSED"
         logger.info("Getting balance for account $accountId")
-        return 0;
+        return UnusedMethod(list).toLong();
     }
 
-    private fun UnusedMethod() {
-        val array = listOf(1)
-        val arrayOutBounds = array[3]
+    private fun UnusedMethod(list: List<Int>): String {
+        return list[3].toString()
     }
 
     companion object {

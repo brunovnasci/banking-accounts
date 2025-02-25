@@ -8,7 +8,7 @@ class GetAccountBalanceServiceTest {
 
     @Test
     fun `should return balance for given account id`() {
-        val actualBalance = service.execute("12345")
+        val actualBalance = service.execute("12345", listOf(1, 2, 3, 4, 5))
 
         assertEquals(0, actualBalance)
     }
