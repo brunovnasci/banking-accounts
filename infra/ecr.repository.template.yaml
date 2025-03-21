@@ -1,0 +1,29 @@
+Parameters:
+  ApplicationName:
+    Description: The name of the application
+    Type: String
+    Default: banking-accounts
+
+  EnvironmentName:
+    Description: An environment name that will be prefixed to resource names
+    Type: String
+    Default: dev
+
+Resources:
+  ECRRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: banking-accounts
+
+Outputs:
+  ECRRepository:
+    Description: The ARN of the ECR repository
+    Value: !GetAtt ECRRepository.Arn
+    Export:
+      Name: !Sub ${ApplicationName}-${EnvironmentName}-ecr-repository
+
+  ECRRepositoryUri:
+    Description: The URI of the ECR repository
+    Value: !GetAtt ECRRepository.RepositoryUri
+    Export:
+      Name: !Sub ${ApplicationName}-${EnvironmentName}-ecr-repository-uri
