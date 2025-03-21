@@ -17,7 +17,7 @@ jobs:
     with:
       application_name: banking-accounts
       aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-dev-github-actions-role
       environment: dev
       cluster: tcc-cluster-dev
       docker_image_tag: ${{ inputs.docker_image_tag }}
