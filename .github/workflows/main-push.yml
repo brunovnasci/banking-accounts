@@ -14,7 +14,7 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       java_version: 17
-
+#  mvn clean verify sonar:sonar -Dsonar.projectKey=banking-accounts -Dsonar.projectName=banking-accounts -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_3e6ede86747a9b76f0a22ee79c0f3ba7b71191c1 -Dsonar.pullrequest.key=1 -Dsonar.pullrequest.branch=test/success -Dsonar.pullrequest.base=main
   docker:
     needs: build
     uses: ./.github/workflows/docker-build.yml
@@ -22,7 +22,7 @@ jobs:
       application_name: banking-accounts
       image_tag: ${{ github.sha }}
       aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-dev-github-actions-role
 
   deploy:
     needs: docker
@@ -30,7 +30,7 @@ jobs:
     with:
       application_name: banking-accounts
       aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-dev-github-actions-role
       environment: dev
       cluster: tcc-cluster-dev
       docker_image_tag: ${{ needs.docker.outputs.docker-image-tag }}

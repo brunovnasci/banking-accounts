@@ -44,16 +44,24 @@ Resources:
       TaskRoleArn: !GetAtt TaskRole.Arn
       ContainerDefinitions:
         - Name: hello-world
-          Image: hello-world:latest
+          Image: nginx:latest
           Cpu: 128
           Memory: 256
           Essential: true
-#          PortMappings:
-#            - Name: !Sub ${ApplicationName}-${EnvironmentName}-8080-http
-#              ContainerPort: 8080
-#              HostPort: 8080
-#              Protocol: tcp
-#              AppProtocol: http
+          healthCheck:
+            command:
+              - CMD-SHELL
+              - echo "curl -f http://localhost:80 || exit 1"
+            interval: 30
+            retries: 3
+            startPeriod: 60
+            timeout: 5
+          PortMappings:
+            - Name: !Sub ${ApplicationName}-${EnvironmentName}-http-http
+              ContainerPort: 80
+              HostPort: 80
+              Protocol: tcp
+              AppProtocol: http
 #          LogConfiguration:
 #            LogDriver: awslogs
 #            Options:
@@ -81,7 +89,12 @@ Resources:
 
 Outputs:
   Service:
-      Description: The ARN of the ECS service
-      Value: !Ref ECSService
-      Export:
-        Name: !Sub ${ApplicationName}-${EnvironmentName}-service-arn
+    Description: The ARN of the ECS service
+    Value: !Ref ECSService
+    Export:
+      Name: !Sub ${ApplicationName}-${EnvironmentName}-ecs-service
+  TaskRole:
+    Description: The ARN of the role used to start up a ECS task
+    Value: !GetAtt TaskRole.Arn
+    Export:
+      Name: !Sub ${ApplicationName}-${EnvironmentName}-task-role
