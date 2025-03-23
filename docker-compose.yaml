@@ -1,0 +1,35 @@
+services:
+  sonarqube:
+    image: sonarqube:24.12.0.100206-community
+    container_name: sonarqube
+    depends_on:
+      sonarqube_branch_plugin_downloader:
+        condition: service_completed_successfully
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_WEB_JAVAADDITIONALOPTS=-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web
+      - SONAR_CE_JAVAADDITIONALOPTS=-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce
+    volumes:
+      - sonarqube-branch-plugin-downloader:/opt/sonarqube/extensions/plugins
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+
+  sonarqube_branch_plugin_downloader:
+    image: ubuntu:latest
+    container_name: sonarqube-branch-plugin-downloader
+    volumes:
+      - sonarqube-branch-plugin-downloader:/sonarqube-branch-plugin
+    entrypoint: >
+      /bin/bash -c "
+      if [ ! -f /sonarqube-branch-plugin/sonarqube-community-branch-plugin-1.23.0.jar ]; then
+        apt-get update && apt-get install -y wget &&
+        wget -P /sonarqube-branch-plugin https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.23.0/sonarqube-community-branch-plugin-1.23.0.jar;
+      else
+        echo 'SonarQube branch plugin already exists';
+      fi"
+
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_branch_plugin_downloader:
