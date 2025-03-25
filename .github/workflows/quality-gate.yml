@@ -2,6 +2,30 @@ name: Quality Gate
 
 on:
   workflow_call:
+    inputs:
+      application_name:
+        description: "Application name"
+        required: true
+        type: string
+      java_version:
+        description: "Application java version"
+        type: string
+        required: true
+      branch_name:
+        description: "Branch name"
+        type: string
+        required: true
+      sonar_wait_quality_gate:
+        description: "If true the workflow will wait for the quality gate to finish"
+        type: string
+        required: true
+    secrets:
+      sonar_host:
+        description: "SonarQube host"
+        required: true
+      sonar_token:
+        description: "SonarQube token"
+        required: true
 
 jobs:
   quality-gate:
@@ -10,35 +34,30 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: "${{ inputs.java_version }}"
+          architecture: x64
+          cache: maven
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
           name: build-artifacts
           path: target/
-      - name: Add coverage to PR
-        uses: madrapps/jacoco-report@v1.7.1
-        id: jacoco
+      - name: Cache SonarQube packages
+        uses: actions/cache@v1
         with:
-          paths: |
-            ${{ github.workspace }}/**/target/site/jacoco/jacoco.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          min-coverage-overall: 90
-          min-coverage-changed-files: 90
-          title: '# :lobster: Coverage Report'
-          update-comment: true
-      - name: Get the Coverage info
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Run SonarQube analysis
         run: |
-          echo "Total coverage ${{ steps.jacoco.outputs.coverage-overall }}"
-          echo "Changed Files coverage ${{ steps.jacoco.outputs.coverage-changed-files }}"
-      - name: Apply quality gate for overall coverage
-        if: ${{ steps.jacoco.outputs.coverage-overall < 90.0 }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.setFailed('Overall coverage is less than 90%!')
-      - name: Apply quality gate for changed files coverage
-        if: ${{ steps.jacoco.outputs.coverage-changed-files < 90.0 }}
-        uses: actions/github-script@v6
-        with:
-          script: |
-            core.setFailed('Changed files coverage is less than 90%!')
+          mvn sonar:sonar
+            -Dsonar.projectKey=${{ inputs.application_name }}
+            -Dsonar.projectName=${{ inputs.application_name }} 
+            -Dsonar.host.url=${{ inputs.sonar_host }}
+            -Dsonar.token=${{ secrets.sonar_token }}
+            -Dsonar.branch.name=${{ inputs.branch_name }}
+            -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
