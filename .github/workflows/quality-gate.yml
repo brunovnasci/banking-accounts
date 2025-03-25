@@ -46,12 +46,6 @@ jobs:
         with:
           name: build-artifacts
           path: target/
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
       - name: Run SonarQube analysis
         run: |
           mvn sonar:sonar
@@ -61,3 +55,9 @@ jobs:
             -Dsonar.token=${{ secrets.sonar_token }}
             -Dsonar.branch.name=${{ inputs.branch_name }}
             -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar

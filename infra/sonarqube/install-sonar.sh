@@ -8,7 +8,7 @@ sudo wget -P /sonarqube/extensions/plugins https://github.com/mc1arke/sonarqube-
 
 sudo docker run \
   -p 80:9000 \
-  -v /sonarqube/extensions:/opt/sonarqube/extensions \
+  -v /sonarqube/extensions/plugins:/opt/sonarqube/extensions/plugins \
   -e SONAR_WEB_JAVAADDITIONALOPTS="-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web" \
   -e SONAR_CE_JAVAADDITIONALOPTS="-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce" \
   sonarqube:25.1.0.102122-community
