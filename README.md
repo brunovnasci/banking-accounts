@@ -8,6 +8,16 @@ Executar container Docker:
 docker run -d -p 8080:8080 --name banking-accounts banking-accounts:latest
 ```
 
+Criar instancia SonarQube:
+```bash
+aws cloudformation create-stack --stack-name sonarqube --template-body file://infra/ec2.sonarqube.template.yaml
+```
+
+Eliminar instancia SonarQube:
+```bash
+aws cloudformation delete-stack --stack-name sonarqube
+```
+
 Criar repositorio ECR
 ```bash
 aws cloudformation create-stack --stack-name banking-accounts-ecr-repository --template-body file://infra/ecr.repository.template.yaml

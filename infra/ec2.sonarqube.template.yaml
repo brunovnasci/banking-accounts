@@ -17,13 +17,14 @@ Parameters:
   KeyName:
     Description: Name of an existing EC2 KeyPair to enable SSH access to the EC2 instance
     Type: AWS::EC2::KeyPair::KeyName
-    default: desktop-w11
+    Default: desktop-w11
 
 Resources:
   SecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupName: SonarQubeSecurityGroup
+      GroupDescription: SonarQube Security Group
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -38,7 +39,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t2.medium
-      ImageId: ami-0c55b159cbfafe1f0
+      ImageId: ami-0d0f28110d16ee7d6
       SecurityGroupIds:
         - !Ref SecurityGroup
       KeyName: !Ref KeyName
@@ -52,9 +53,9 @@ Resources:
 
           sudo wget -P /sonarqube/extensions/plugins https://github.com/mc1arke/sonarqube-community-branch-plugin/releases/download/1.23.0/sonarqube-community-branch-plugin-1.23.0.jar
           
-          sudo docker run \
+          sudo docker run -d \
           -p 80:9000 \
-          -v /sonarqube/extensions:/opt/sonarqube/extensions \
+          -v /sonarqube/extensions/plugins:/opt/sonarqube/extensions/plugins \
           -e SONAR_WEB_JAVAADDITIONALOPTS="-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=web" \
           -e SONAR_CE_JAVAADDITIONALOPTS="-javaagent:/opt/sonarqube/extensions/plugins/sonarqube-community-branch-plugin-1.23.0.jar=ce" \
           sonarqube:25.1.0.102122-community
