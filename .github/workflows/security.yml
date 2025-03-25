@@ -8,27 +8,6 @@ on:
         required: true
 
 jobs:
-  codeql:
-    name: CodeQL analysis
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: java-kotlin
-          build-mode: autobuild
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: target/
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:java-kotlin"
-
   snyk:
     name: Snyk analysis
     runs-on: ubuntu-latest
