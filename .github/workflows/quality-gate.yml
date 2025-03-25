@@ -51,7 +51,14 @@ jobs:
           name: build-artifacts
           path: target/
       - name: Run SonarQube analysis
-        run: mvn sonar:sonar -Dsonar.projectKey=${{ inputs.application_name }} -Dsonar.projectName=${{ inputs.application_name }}  -Dsonar.host.url=${{ inputs.sonar_host }} -Dsonar.token=${{ secrets.sonar_token }} -Dsonar.branch.name=${{ inputs.branch_name }} -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
+        run: >
+          mvn sonar:sonar
+          -Dsonar.projectKey=${{ inputs.application_name }}
+          -Dsonar.projectName=${{ inputs.application_name }} 
+          -Dsonar.host.url=${{ inputs.sonar_host }}
+          -Dsonar.token=${{ secrets.sonar_token }}
+          -Dsonar.branch.name=${{ inputs.branch_name }}
+          -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
       - name: Cache SonarQube packages
         uses: actions/cache@v4
         with:
