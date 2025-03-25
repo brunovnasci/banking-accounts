@@ -14,7 +14,19 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       java_version: 17
-#  mvn clean verify sonar:sonar -Dsonar.projectKey=banking-accounts -Dsonar.projectName=banking-accounts -Dsonar.host.url=http://localhost:9000 -Dsonar.token=sqp_3e6ede86747a9b76f0a22ee79c0f3ba7b71191c1 -Dsonar.pullrequest.key=1 -Dsonar.pullrequest.branch=test/success -Dsonar.pullrequest.base=main
+
+  quality-gate:
+    needs: build
+    uses: ./.github/workflows/quality-gate.yml
+    with:
+      java_version: 17
+      application_name: banking-accounts
+      branch_name: ${{ github.head_ref }}
+      sonar_wait_quality_gate: false
+    secrets:
+      sonar_host: ${{ secrets.SONAR_HOST }}
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
+
   docker:
     needs: build
     uses: ./.github/workflows/docker-build.yml
