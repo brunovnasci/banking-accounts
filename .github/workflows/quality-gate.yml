@@ -19,10 +19,6 @@ on:
         description: "If true the workflow will wait for the quality gate to finish"
         type: string
         required: true
-      sonar_host:
-        description: "SonarQube host"
-        type: string
-        required: true
     secrets:
       sonar_host:
         description: "SonarQube host"
@@ -55,7 +51,7 @@ jobs:
           mvn sonar:sonar
           -Dsonar.projectKey=${{ inputs.application_name }}
           -Dsonar.projectName=${{ inputs.application_name }} 
-          -Dsonar.host.url=${{ inputs.sonar_host }}
+          -Dsonar.host.url=${{ secrets.sonar_host }}
           -Dsonar.token=${{ secrets.sonar_token }}
           -Dsonar.branch.name=${{ inputs.branch_name }}
           -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
