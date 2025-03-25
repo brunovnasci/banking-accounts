@@ -20,6 +20,14 @@ jobs:
   quality-gate:
     needs: build
     uses: ./.github/workflows/quality-gate.yml
+    with:
+      java_version: 17
+      application_name: banking-accounts
+      branch_name: ${{ github.head_ref }}
+      sonar_wait_quality_gate: true
+    secrets:
+      sonar_host: ${{ secrets.SONAR_HOST }}
+      sonar_token: ${{ secrets.SONAR_TOKEN }}
 
   docker:
     needs: build

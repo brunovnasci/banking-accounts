@@ -37,7 +37,7 @@ Resources:
       Family: !Sub ${ApplicationName}-${EnvironmentName}
       Cpu: 256
       Memory: 400
-      NetworkMode: host
+      NetworkMode: bridge
       RuntimePlatform:
         CpuArchitecture: x86_64
         OperatingSystemFamily: LINUX
