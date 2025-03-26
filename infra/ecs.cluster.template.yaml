@@ -19,11 +19,6 @@ Parameters:
     Type: List<AWS::EC2::Subnet::Id>
     Default: subnet-03b3ea4a7b3c5f6d4
 
-  SecurityGroup:
-    Description: Select the Security Group to use for the ECS cluster hosts
-    Type: AWS::EC2::SecurityGroup::Id
-    Default: sg-04bbde78bfefb254a
-
   ECSAMI:
     Description: ECS-Optimized AMI ID
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
@@ -65,7 +60,7 @@ Resources:
         IamInstanceProfile:
           Name: !Ref EC2InstanceProfile
         SecurityGroupIds:
-          - !Ref SecurityGroup
+          - !Ref ContainerHostSecurityGroup
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash -xe
