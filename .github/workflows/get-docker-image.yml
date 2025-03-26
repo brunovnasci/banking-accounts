@@ -3,10 +3,6 @@ name: Build Docker image
 on:
   workflow_call:
     inputs:
-      application_name:
-        description: "Application name"
-        required: true
-        type: string
       image_tag:
         description: "Docker image tag"
         required: true
@@ -26,7 +22,7 @@ on:
 
 jobs:
   docker:
-    name: Build Docker image
+    name: Get Docker image tag
     runs-on: ubuntu-latest
     outputs:
       docker-image-tag: ${{ steps.export-docker-image-tag.outputs.tag }}
@@ -38,24 +34,15 @@ jobs:
         with:
           role-to-assume: "${{ inputs.iam_role }}"
           aws-region: "${{ inputs.aws_region }}"
-      - name: Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: build-artifacts
-          path: target/
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
       - name: Export Docker image tag
         id: export-docker-image-tag
         run: echo "tag=${{ steps.login-ecr.outputs.registry }}/${{ inputs.application_name }}:${{ inputs.image_tag }}" >> "$GITHUB_OUTPUT"
-      - name: Check if Docker image doesn't exists
+      - name: Check if Docker image exists
         run: |
-          if docker manifest inspect -v ${{ steps.export-docker-image-tag.outputs.tag }}; then
-            echo "Docker image '${{ steps.export-docker-image-tag.outputs.tag }}' already exists"
+          if ! docker manifest inspect -v ${{ steps.export-docker-image-tag.outputs.tag }}; then
+            echo "Docker image '${{ steps.export-docker-image-tag.outputs.tag }}' doesn't exists"
             exit 1
           fi
-      - name: Build Docker image
-        run: docker build -t ${{ steps.export-docker-image-tag.outputs.tag }} .
-      - name: Push Docker image
-        run: docker push ${{ steps.export-docker-image-tag.outputs.tag }}

@@ -85,7 +85,7 @@ Resources:
       HealthCheckGracePeriodSeconds: 10
       DeploymentConfiguration:
         MaximumPercent: 200
-        MinimumHealthyPercent: 100
+        MinimumHealthyPercent: 0
 
 Outputs:
   Service:
