@@ -15,6 +15,5 @@ jobs:
       - uses: actions/checkout@master
       - name: Run Snyk
         uses: snyk/actions/maven-3-jdk-17@master
-        continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.snyk_token }}
