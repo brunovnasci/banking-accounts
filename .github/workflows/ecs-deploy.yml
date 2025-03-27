@@ -46,8 +46,8 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
       - name: Check if Docker image exists
         run: |
-          if ! docker manifest inspect -v ${{ inputs.image_tag }}; then
-            echo "Docker image '${{ inputs.image_tag }}' doesn't exists"
+          if ! docker manifest inspect -v ${{ inputs.docker_image_tag }}; then
+            echo "Docker image '${{ inputs.docker_image_tag }}' doesn't exists"
             exit 1
           fi
       - name: Fill in the new image ID in the Amazon ECS task definition
