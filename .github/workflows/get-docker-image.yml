@@ -3,6 +3,10 @@ name: Build Docker image
 on:
   workflow_call:
     inputs:
+      application_name:
+        description: "Application name"
+        required: true
+        type: string
       image_tag:
         description: "Docker image tag"
         required: true
