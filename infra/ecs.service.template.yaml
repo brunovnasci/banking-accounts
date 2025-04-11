@@ -3,10 +3,14 @@ Parameters:
     Description: The name of the ECS cluster
     Type: String
     Default: tcc-cluster
+
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
-    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+
   ApplicationName:
     Description: The name of the application
     Type: String
@@ -70,14 +74,14 @@ Resources:
 #              awslogs-region: !Sub ${AWS::Region}
 #              awslogs-stream-prefix: !Sub ${ClusterName}
       ExecutionRoleArn:
-        "Fn::ImportValue": !Sub ${ClusterName}-${EnvironmentName}-task-execution-role
+        "Fn::ImportValue": !Sub ${ClusterName}-task-execution-role
 
   ECSService:
     Type: AWS::ECS::Service
     DependsOn: TaskDefinition
     Properties:
       Cluster:
-        "Fn::ImportValue": !Sub ${ClusterName}-${EnvironmentName}-cluster-name
+        "Fn::ImportValue": !Sub ${ClusterName}-cluster-name
       DesiredCount: 1
       LaunchType: EC2
       ServiceName: !Sub ${ApplicationName}-${EnvironmentName}
