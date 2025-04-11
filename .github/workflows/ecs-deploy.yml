@@ -30,7 +30,7 @@ on:
 
 jobs:
   deploy-to-ecs:
-    name: Deploy application to ECS cluster
+    name: "[${{ inputs.environment }}] Deploy application to ECS cluster"
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
