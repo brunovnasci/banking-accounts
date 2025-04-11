@@ -25,9 +25,8 @@ jobs:
       application_name: banking-accounts
       branch_name: ${{ github.head_ref }}
       sonar_host: ${{ vars.SONAR_HOST }}
-      sonar_wait_quality_gate: false
+      sonar_wait_quality_gate: true
     secrets:
-      sonar_host: ${{ secrets.SONAR_HOST }}
       sonar_token: ${{ secrets.SONAR_TOKEN }}
 
   docker:

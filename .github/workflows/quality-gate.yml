@@ -24,9 +24,6 @@ on:
         type: string
         required: true
     secrets:
-      sonar_host:
-        description: "SonarQube host"
-        required: true
       sonar_token:
         description: "SonarQube token"
         required: true
@@ -36,7 +33,6 @@ jobs:
     name: Apply quality Gate
     runs-on: ubuntu-latest
     steps:
-      - run: echo "SonarQube host -> ${{ inputs.sonar_host }}"
       - name: Check out code
         uses: actions/checkout@v4
       - name: Set up JDK
@@ -51,18 +47,18 @@ jobs:
         with:
           name: build-artifacts
           path: target/
-      - name: Run SonarQube analysis
-        run: >
-          mvn sonar:sonar
-          -Dsonar.projectKey=${{ inputs.application_name }}
-          -Dsonar.projectName=${{ inputs.application_name }} 
-          -Dsonar.host.url=${{ secrets.sonar_host }}
-          -Dsonar.token=${{ secrets.sonar_token }}
-          -Dsonar.branch.name=${{ inputs.branch_name }}
-          -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
-      - name: Cache SonarQube packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+#      - name: Run SonarQube analysis
+#        run: >
+#          mvn sonar:sonar
+#          -Dsonar.projectKey=${{ inputs.application_name }}
+#          -Dsonar.projectName=${{ inputs.application_name }}
+#          -Dsonar.host.url=${{ inputs.sonar_host }}
+#          -Dsonar.token=${{ secrets.sonar_token }}
+#          -Dsonar.branch.name=${{ inputs.branch_name }}
+#          -Dsonar.qualitygate.wait=${{ inputs.sonar_wait_quality_gate }}
+#      - name: Cache SonarQube packages
+#        uses: actions/cache@v4
+#        with:
+#          path: ~/.sonar/cache
+#          key: ${{ runner.os }}-sonar
+#          restore-keys: ${{ runner.os }}-sonar
