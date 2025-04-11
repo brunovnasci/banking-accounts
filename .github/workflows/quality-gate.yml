@@ -19,6 +19,10 @@ on:
         description: "If true the workflow will wait for the quality gate to finish"
         type: string
         required: true
+      sonar_host:
+        description: "SonarQube host"
+        type: string
+        required: true
     secrets:
       sonar_host:
         description: "SonarQube host"
@@ -32,6 +36,7 @@ jobs:
     name: Apply quality Gate
     runs-on: ubuntu-latest
     steps:
+      - run: echo "SonarQube host -> ${{ inputs.sonar_host }}"
       - name: Check out code
         uses: actions/checkout@v4
       - name: Set up JDK
