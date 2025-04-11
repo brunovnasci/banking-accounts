@@ -9,11 +9,6 @@ Parameters:
     Type: String
     Default: banking-accounts
 
-  EnvironmentName:
-    Description: An environment name that will be prefixed to resource names
-    Type: String
-    Default: dev
-
   GithubRepositoryName:
     Description: The name of the application Github repository
     Type: String
@@ -32,7 +27,7 @@ Resources:
     DependsOn:
       - GithubOIDCProvider
     Properties:
-      RoleName: !Sub ${ApplicationName}-${EnvironmentName}-github-actions-role
+      RoleName: !Sub ${ApplicationName}-github-actions-role
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -46,7 +41,7 @@ Resources:
               StringLike:
                 token.actions.githubusercontent.com:sub: !Sub repo:${GithubRepositoryName}:*
       Policies:
-        - PolicyName: !Sub ${ApplicationName}-${EnvironmentName}-github-actions-ecr-pull-and-push-policy
+        - PolicyName: !Sub ${ApplicationName}-github-actions-ecr-pull-and-push-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -64,8 +59,8 @@ Resources:
                   - ecr:PutImage
                   - ecr:UploadLayerPart
                 Resource:
-                  "Fn::ImportValue": !Sub ${ApplicationName}-${EnvironmentName}-ecr-repository
-        - PolicyName: !Sub ${ApplicationName}-${EnvironmentName}-github-actions-ecs-deploy-policy
+                  "Fn::ImportValue": !Sub ${ApplicationName}-ecr-repository
+        - PolicyName: !Sub ${ApplicationName}-github-actions-ecs-deploy-policy
           PolicyDocument:
             Version: '2012-10-17'
             Statement:
@@ -77,14 +72,16 @@ Resources:
                 Action:
                   - iam:PassRole
                 Resource:
-                  - "Fn::ImportValue": !Sub ${ApplicationName}-${EnvironmentName}-task-role
-                  - "Fn::ImportValue": !Sub ${ClusterName}-${EnvironmentName}-task-execution-role
+                  - "Fn::ImportValue": !Sub ${ApplicationName}-dev-task-role
+                  - "Fn::ImportValue": !Sub ${ApplicationName}-prod-task-role
+                  - "Fn::ImportValue": !Sub ${ClusterName}-task-execution-role
               - Effect: Allow
                 Action:
                   - ecs:UpdateService
                   - ecs:DescribeServices
                 Resource:
-                  "Fn::ImportValue": !Sub ${ApplicationName}-${EnvironmentName}-ecs-service
+                  - "Fn::ImportValue": !Sub ${ApplicationName}-dev-ecs-service
+                  - "Fn::ImportValue": !Sub ${ApplicationName}-prod-ecs-service
 
 Outputs:
   GithubOIDCProvider:

@@ -43,19 +43,34 @@ Eliminar cluster ECS:
 aws cloudformation delete-stack --stack-name tcc-cluster
 ```
 
-Criar serviço ECS
+Criar serviço ECS dev
 ```bash
-aws cloudformation create-stack --stack-name banking-accounts-ecs-service --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation create-stack --stack-name banking-accounts-ecs-service-dev --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=EnvironmentName,ParameterValue=dev
 ```
 
-Atualizar serviço ECS
+Atualizar serviço ECS dev
 ```bash
-aws cloudformation update-stack --stack-name banking-accounts-ecs-service --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM
+aws cloudformation update-stack --stack-name banking-accounts-ecs-service-dev --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM
 ```
 
-Eliminar serviço ECS
+Eliminar serviço ECS dev
 ```bash
-aws cloudformation delete-stack --stack-name banking-accounts-ecs-service
+aws cloudformation delete-stack --stack-name banking-accounts-ecs-service-dev
+``` 
+
+Criar serviço ECS prod
+```bash
+aws cloudformation create-stack --stack-name banking-accounts-ecs-service-prod --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM --parameters ParameterKey=EnvironmentName,ParameterValue=prod
+```
+
+Atualizar serviço ECS prod
+```bash
+aws cloudformation update-stack --stack-name banking-accounts-ecs-service-prod --template-body file://infra/ecs.service.template.yaml --capabilities CAPABILITY_NAMED_IAM
+```
+
+Eliminar serviço ECS prod
+```bash
+aws cloudformation delete-stack --stack-name banking-accounts-ecs-service-prod
 ``` 
 
 Criar OIDC para o Github Actions

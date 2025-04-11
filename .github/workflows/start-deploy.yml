@@ -18,15 +18,28 @@ jobs:
       application_name: banking-accounts
       image_tag: ${{ inputs.docker_image_tag }}
       aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-dev-github-actions-role
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
-  deploy:
+  deploy-dev:
     needs: get-docker-image
     uses: ./.github/workflows/ecs-deploy.yml
     with:
       application_name: banking-accounts
       aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-dev-github-actions-role
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
       environment: dev
-      cluster: tcc-cluster-dev
+      cluster: tcc-cluster
+      task_definition: .aws/task-definition-dev.json
+      docker_image_tag: ${{ needs.get-docker-image.outputs.docker-image-tag }}
+
+  deploy-prod:
+    needs: get-docker-image
+    uses: ./.github/workflows/ecs-deploy.yml
+    with:
+      application_name: banking-accounts
+      aws_region: us-east-2
+      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+      environment: prod
+      cluster: tcc-cluster
+      task_definition: .aws/task-definition-prod.json
       docker_image_tag: ${{ needs.get-docker-image.outputs.docker-image-tag }}
