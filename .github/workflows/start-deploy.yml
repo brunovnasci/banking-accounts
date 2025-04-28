@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   get-docker-image:
-    uses: ./.github/workflows/get-docker-image.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/get-docker-image.yml@main
     with:
       application_name: banking-accounts
       image_tag: ${{ inputs.docker_image_tag }}
@@ -22,7 +22,7 @@ jobs:
 
   deploy-dev:
     needs: get-docker-image
-    uses: ./.github/workflows/ecs-deploy.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
     with:
       application_name: banking-accounts
       aws_region: us-east-2
@@ -34,7 +34,7 @@ jobs:
 
   deploy-prod:
     needs: get-docker-image
-    uses: ./.github/workflows/ecs-deploy.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
     with:
       application_name: banking-accounts
       aws_region: us-east-2

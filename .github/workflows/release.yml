@@ -10,13 +10,13 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/build.yml@main
     with:
       java_version: 17
 
   docker:
     needs: build
-    uses: ./.github/workflows/docker-build.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/docker-build.yml@main
     with:
       application_name: banking-accounts
       image_tag: ${{ github.ref_name }}
@@ -25,7 +25,7 @@ jobs:
 
   deploy-dev:
     needs: docker
-    uses: ./.github/workflows/ecs-deploy.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
     with:
       application_name: banking-accounts
       aws_region: us-east-2
@@ -37,7 +37,7 @@ jobs:
 
   deploy-prod:
     needs: docker
-    uses: ./.github/workflows/ecs-deploy.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
     with:
       application_name: banking-accounts
       aws_region: us-east-2
@@ -49,6 +49,6 @@ jobs:
 
   security:
     needs: build
-    uses: ./.github/workflows/security.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/security.yml@main
     secrets:
       snyk_token: ${{ secrets.SNYK_TOKEN }}
