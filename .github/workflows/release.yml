@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/build.yml@main
     with:
       java_version: 17
 
