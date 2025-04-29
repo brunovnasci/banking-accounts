@@ -36,17 +36,17 @@ jobs:
       aws_region: us-east-2
       iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
 
-  deploy:
-    needs: docker
-    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
-    with:
-      application_name: banking-accounts
-      aws_region: us-east-2
-      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
-      environment: dev
-      cluster: tcc-cluster
-      task_definition: .aws/task-definition-dev.json
-      docker_image_tag: ${{ needs.docker.outputs.docker-image-tag }}
+#  deploy:
+#    needs: docker
+#    uses: brunovnasci/trunk-based-ci-cd/.github/workflows/ecs-deploy.yml@main
+#    with:
+#      application_name: banking-accounts
+#      aws_region: us-east-2
+#      iam_role: arn:aws:iam::140023370685:role/banking-accounts-github-actions-role
+#      environment: dev
+#      cluster: tcc-cluster
+#      task_definition: .aws/task-definition-dev.json
+#      docker_image_tag: ${{ needs.docker.outputs.docker-image-tag }}
 
   security:
     needs: build
